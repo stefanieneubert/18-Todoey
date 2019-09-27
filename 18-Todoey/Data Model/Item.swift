@@ -8,8 +8,8 @@
 
 import Foundation
 
-
-class Item {
+// class must be encodable to save it with the encoder to the file path
+class Item: Codable { // Codable = Encodable, Decodable
     var title: String = ""
     var done: Bool = false
 }
