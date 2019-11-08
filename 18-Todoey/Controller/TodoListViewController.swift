@@ -11,6 +11,15 @@ import CoreData
 
 class TodoListViewController: UITableViewController {
     
+    // create segue:
+    // ctrl + drag from yellow icon abore the view to the new contoller
+    // click on the "Show" segue
+    // click on segue, specify identifier (goToItems)
+    
+    // specify a new root view controller:
+    // ctrl + drag from yellow icon above the view to the new controller,
+    // click on Relationship Segue - root view controller
+    
     let defaults: UserDefaults = UserDefaults.standard
     // init the item array as an array of items
     var itemArray = [Item]()
