@@ -125,5 +125,19 @@ extension TodoListViewController: UISearchBarDelegate {
         loadItems(with: request)
     }
     
+    // reload all items if search text is deleted
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.count == 0 {
+            loadItems()
+            
+            // run this explicitly on the main thread
+            DispatchQueue.main.async {
+                // original state before search bar was focused
+                // (no keyboard showing, search bar not focused)
+                searchBar.resignFirstResponder()
+            }
+        }
+    }
+    
 }
 
