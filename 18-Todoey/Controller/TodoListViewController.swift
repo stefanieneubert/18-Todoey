@@ -20,9 +20,14 @@ class TodoListViewController: UITableViewController {
     // ctrl + drag from yellow icon above the view to the new controller,
     // click on Relationship Segue - root view controller
     
-    let defaults: UserDefaults = UserDefaults.standard
     // init the item array as an array of items
     var itemArray = [Item]()
+    
+    var selectedCategory : Category? {
+        didSet {
+            loadItems()
+        }
+    }
     
     // create the Items.plist in the file manager of the app
     let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
@@ -31,11 +36,10 @@ class TodoListViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadItems()
         //install datum free
     }
     
-    // MARK Tableview Datasource Methods
+    // MARK: - Tableview Datasource Methods
     // What the cells display, how many rows displayed
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -50,7 +54,7 @@ class TodoListViewController: UITableViewController {
         return cell
     }
     
-    // MARK TableVies Delegate Methods
+    // MARK: - TableVies Delegate Methods
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
         // update:
@@ -64,7 +68,7 @@ class TodoListViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    // MARK Add new Items
+    // MARK: - Add new Items
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         
         var textField = UITextField()
@@ -78,6 +82,7 @@ class TodoListViewController: UITableViewController {
                 let newItem = Item(context: self.context)
                 newItem.title = text
                 newItem.done = false
+                newItem.parentCategory = self.selectedCategory
                 self.itemArray.append(newItem)
 //                self.defaults.set(self.itemArray, forKey: "TodoListArray")
                 self.saveItems()
@@ -91,7 +96,7 @@ class TodoListViewController: UITableViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    // MARK Save data to app storage
+    // MARK: - Save data to app storage
     func saveItems() {
         do {
             try context.save()
@@ -105,7 +110,14 @@ class TodoListViewController: UITableViewController {
     
     // with = external parameter name, request = internal parameter name
     // default value = Item.fetchRequest()
-    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
+    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate? = nil) {
+        
+        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
+        if let searchPredicate = predicate {
+            request.predicate = NSCompoundPredicate.init(type: .and, subpredicates: [categoryPredicate, searchPredicate])
+        } else {
+            request.predicate = categoryPredicate
+        }
         
         do {
             itemArray = try context.fetch(request)
@@ -126,12 +138,11 @@ extension TodoListViewController: UISearchBarDelegate {
         let request: NSFetchRequest<Item> = Item.fetchRequest()
         // uses Objective C to search database. More to find on NSPredicate cheat sheets
         // [cd] = insensitive to case and diacritic
-        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
-        request.predicate = predicate
+        let searchPredicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
          // sort the result by title
         request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
         
-        loadItems(with: request)
+        loadItems(with: request, predicate: searchPredicate)
     }
     
     // reload all items if search text is deleted
