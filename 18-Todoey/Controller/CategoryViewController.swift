@@ -14,9 +14,6 @@ class CategoryViewController: UITableViewController {
     let realm = try! Realm()
     
     var categories : Results<Category>?
-    
-    // create the Categories.plist in the file manager of the app
-    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Categories.plist")
 
     override func viewDidLoad() {
         super.viewDidLoad()

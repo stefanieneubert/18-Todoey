@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		210F081A23757A8E00164DF8 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210F081923757A8E00164DF8 /* CategoryViewController.swift */; };
-		21A361D02382AAB6007635FD /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A361CF2382AAB6007635FD /* Data.swift */; };
 		21A361D22382AE13007635FD /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A361D12382AE13007635FD /* Item.swift */; };
 		21A361D42382AE1E007635FD /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A361D32382AE1E007635FD /* Category.swift */; };
 		21BAABD72334E4BF007429CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BAABD62334E4BF007429CA /* AppDelegate.swift */; };
@@ -21,7 +20,6 @@
 
 /* Begin PBXFileReference section */
 		210F081923757A8E00164DF8 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
-		21A361CF2382AAB6007635FD /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		21A361D12382AE13007635FD /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		21A361D32382AE1E007635FD /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		21BAABD32334E4BF007429CA /* 18-Todoey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "18-Todoey.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -51,7 +49,6 @@
 		2118B06C233E06F20032D23C /* Data Model */ = {
 			isa = PBXGroup;
 			children = (
-				21A361CF2382AAB6007635FD /* Data.swift */,
 				21A361D12382AE13007635FD /* Item.swift */,
 				21A361D32382AE1E007635FD /* Category.swift */,
 			);
@@ -248,7 +245,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				210F081A23757A8E00164DF8 /* CategoryViewController.swift in Sources */,
-				21A361D02382AAB6007635FD /* Data.swift in Sources */,
 				21BAABD92334E4BF007429CA /* TodoListViewController.swift in Sources */,
 				21A361D22382AE13007635FD /* Item.swift in Sources */,
 				21BAABD72334E4BF007429CA /* AppDelegate.swift in Sources */,

@@ -21,9 +21,7 @@ class TodoListViewController: UITableViewController {
     // click on Relationship Segue - root view controller
     
     let realm = try! Realm()
-    
     var items : Results<Item>?
-    
     var selectedCategory : Category? {
         didSet {
             loadItems()
@@ -43,7 +41,7 @@ class TodoListViewController: UITableViewController {
     // These methods are also called in tableView.reloadData
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return items?.count ?? 1;
+        return items?.count ?? 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -69,7 +67,8 @@ class TodoListViewController: UITableViewController {
                 print("Error updating item done status")
             }
         }
-        self.tableView.reloadData()
+        tableView.reloadData()
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     // MARK: - Add new Items
@@ -86,16 +85,16 @@ class TodoListViewController: UITableViewController {
                         try self.realm.write {
                             let newItem = Item()
                             newItem.title = text // "done" already has default value of false
+                            newItem.dateCreated = Date()
                             currentCategory.items.append(newItem)
                         }
                     } catch {
                         print("Error saving context: \(error)")
                     }
                 }
-                
+
                 // reload the data in the table view
                 self.tableView.reloadData()
-
             }
         }
         alert.addTextField { (alertTextField) in
@@ -106,6 +105,7 @@ class TodoListViewController: UITableViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    // Mark: Model manipulation methods
     // with = external parameter name, request = internal parameter name
     // default value = Item.fetchRequest()
     func loadItems() {
@@ -119,32 +119,28 @@ class TodoListViewController: UITableViewController {
 }
 
 // MARK: - Search bar methods
-//extension TodoListViewController: UISearchBarDelegate {
-//
-//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-//        let request: NSFetchRequest<Item> = Item.fetchRequest()
-//        // uses Objective C to search database. More to find on NSPredicate cheat sheets
-//        // [cd] = insensitive to case and diacritic
-//        let searchPredicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
-//         // sort the result by title
-//        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-//
-//        loadItems(with: request, predicate: searchPredicate)
-//    }
-//
-//    // reload all items if search text is deleted
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//        if searchText.count == 0 {
-//            loadItems()
-//
-//            // run this explicitly on the main thread
-//            DispatchQueue.main.async {
-//                // original state before search bar was focused
-//                // (no keyboard showing, search bar not focused)
-//                searchBar.resignFirstResponder()
-//            }
-//        }
-//    }
-//
-//}
+extension TodoListViewController: UISearchBarDelegate {
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        items = items?.filter("title CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "dateCreated", ascending: true)
+        tableView.reloadData()
+
+    }
+
+    // reload all items if search text is deleted
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.count == 0 {
+            loadItems()
+
+            // run this explicitly on the main thread
+            DispatchQueue.main.async {
+                // original state before search bar was focused
+                // (no keyboard showing, search bar not focused)
+                searchBar.resignFirstResponder()
+            }
+        }
+    }
+
+}
 
