@@ -10,5 +10,6 @@ target '18-Todoey' do
   # Pods for 18-Todoey
   
 pod 'RealmSwift'
+pod 'SwipeCellKit', '2.5.4'
 
 end
